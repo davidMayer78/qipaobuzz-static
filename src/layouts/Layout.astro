@@ -1,5 +1,6 @@
 ---
 import { site } from '../lib/site.js';
+import LanternLogo from '../components/LanternLogo.astro';
 
 const {
   title,
@@ -22,6 +23,8 @@ const ads = site.ads;
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
   {canonical && <link rel="canonical" href={canonical} />}
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={site.name} />
@@ -50,53 +53,149 @@ const ads = site.ads;
   )}
 
   <style is:global>
+    :root {
+      --bg: #FFF5F0;
+      --surface: #FFFFFF;
+      --accent: #C73E3A;
+      --accent-soft: #E8D4CE;
+      --gold: #C89B4D;
+      --text: #2C1A15;
+      --muted: #8B6B5E;
+      --border: #EAD4CE;
+      --serif: 'Georgia', 'Times New Roman', 'Noto Serif', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Roboto, sans-serif;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--bg); }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 800px;
+      font-family: var(--sans);
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 10% 0%, #FFE9E0 0%, transparent 35%),
+        radial-gradient(circle at 90% 5%, #FFEBE2 0%, transparent 40%);
+      min-height: 100vh;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 24px 20px 40px;
     }
     header {
-      border-bottom: 2px solid #eee;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 36px;
     }
-    header h1 { margin-bottom: 10px; }
-    header nav a {
-      margin-right: 20px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 8px;
       text-decoration: none;
-      color: #666;
+      color: var(--text);
     }
-    header nav a:hover { color: #333; }
+    .brand-name {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .brand-tagline {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.95rem;
+      margin: 6px 0 18px 58px;
+    }
+    header nav { margin-left: 58px; }
+    header nav a {
+      margin-right: 22px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    header nav a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
     .post {
-      border-bottom: 1px solid #eee;
-      padding: 20px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 2px rgba(139, 42, 40, 0.04);
+      transition: box-shadow 0.2s, transform 0.2s;
     }
-    .post-title { font-size: 1.5rem; margin-bottom: 10px; }
-    .post-title a { text-decoration: none; color: #333; }
-    .post-title a:hover { color: #0066cc; }
-    .post-meta { color: #999; font-size: 0.9rem; margin-bottom: 10px; }
-    .post-excerpt { color: #666; }
-    .post-content { line-height: 1.8; font-size: 1.1rem; }
-    .post-content h1, .post-content h2, .post-content h3 {
-      margin-top: 30px;
-      margin-bottom: 15px;
+    .post:hover {
+      box-shadow: 0 6px 18px rgba(139, 42, 40, 0.08);
+      transform: translateY(-1px);
     }
+    .post-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .post-title a { text-decoration: none; color: var(--text); }
+    .post-title a:hover { color: var(--accent); }
+    .post-meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 10px; }
+    .post-excerpt { color: #4a3a33; }
+
+    .post-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px 36px;
+      line-height: 1.85;
+      font-size: 1.08rem;
+    }
+    .post-content h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .post-content h2, .post-content h3 {
+      font-family: var(--serif);
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.2rem; }
+    .post-content p { margin-bottom: 16px; }
+    .post-content a { color: var(--accent); }
     .post-content code {
-      background: #f4f4f4;
+      background: #f8ece8;
       padding: 2px 6px;
       border-radius: 3px;
+      font-size: 0.92em;
     }
     .post-content pre {
-      background: #f4f4f4;
+      background: #f8ece8;
       padding: 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       overflow-x: auto;
     }
-    .post-content img { max-width: 100%; height: auto; }
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 14px 0;
+    }
+    .post-content blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 16px 0;
+      padding: 4px 18px;
+      color: var(--muted);
+      background: #fff9f6;
+    }
+
     .video-container {
       position: relative;
       padding-bottom: 56.25%;
@@ -104,6 +203,7 @@ const ads = site.ads;
       overflow: hidden;
       max-width: 100%;
       margin: 20px 0;
+      border-radius: 6px;
     }
     .video-container iframe {
       position: absolute;
@@ -115,92 +215,124 @@ const ads = site.ads;
     }
     .tiktok-embed { margin: 20px 0; }
     .twitter-tweet { margin: 20px auto; }
+
     .tag {
       display: inline-block;
-      background: #eee;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-size: 0.85rem;
-      margin-right: 5px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      margin-right: 6px;
+      margin-top: 2px;
     }
     .tag a { color: inherit; text-decoration: none; }
+    .tag:hover { background: var(--accent); color: #fff; }
+    .tag:hover a { color: #fff; }
+
     .back-link {
       display: inline-block;
       margin-bottom: 20px;
-      color: #0066cc;
+      color: var(--accent);
       text-decoration: none;
+      font-size: 0.92rem;
     }
+    .back-link:hover { text-decoration: underline; }
+
     footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-      color: #999;
-      font-size: 0.9rem;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
     }
+
     .pagination {
-      margin-top: 50px;
-      padding-top: 30px;
-      border-top: 1px solid #eee;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .pagination-link {
       display: inline-block;
-      padding: 10px 20px;
-      background: #f4f4f4;
-      border-radius: 5px;
+      padding: 10px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
       text-decoration: none;
-      color: #333;
+      color: var(--text);
+      font-size: 0.92rem;
     }
-    .pagination-info { color: #666; }
+    .pagination-link:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .pagination-info { color: var(--muted); font-size: 0.88rem; }
+
     .related-posts {
-      margin-top: 60px;
-      padding-top: 40px;
-      border-top: 2px solid #eee;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
     }
     .related-posts h3 {
-      font-size: 1.5rem;
-      margin-bottom: 25px;
-      color: #333;
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      margin-bottom: 20px;
+      color: var(--text);
     }
     .related-posts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
     }
     .related-post-card {
-      border: 1px solid #eee;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 20px;
+      padding: 16px 18px;
       transition: box-shadow 0.2s;
     }
-    .related-post-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .related-post-card:hover { box-shadow: 0 4px 14px rgba(139, 42, 40, 0.1); }
     .related-post-link { text-decoration: none; color: inherit; }
     .related-post-link h4 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-      color: #333;
+      font-family: var(--serif);
+      font-size: 1.02rem;
+      margin-bottom: 8px;
+      color: var(--text);
     }
     .related-post-excerpt {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 10px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 8px;
       line-height: 1.5;
     }
-    .related-post-date { font-size: 0.8rem; color: #999; }
-    .ad-slot { margin: 30px 0; text-align: center; }
-    .ad-slot-top { margin: 20px 0; }
-    .ad-slot-in-article { margin: 30px 0; clear: both; }
+    .related-post-date { font-size: 0.78rem; color: var(--muted); }
+
+    .ad-slot { margin: 26px 0; text-align: center; }
+    .ad-slot-top { margin: 14px 0 22px; }
+    .ad-slot-in-article { margin: 26px 0; clear: both; }
+
     @media (max-width: 600px) {
+      body { padding: 16px 14px 30px; }
+      .post { padding: 18px 18px; }
+      .post-content { padding: 22px 20px; }
       .related-posts-grid { grid-template-columns: 1fr; }
+      .brand-name { font-size: 1.75rem; }
+      .brand-tagline, header nav { margin-left: 0; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1><a href="/" style="text-decoration: none; color: #333;">{site.name}</a></h1>
-    <p style="color: #666; margin-bottom: 15px;">{site.description}</p>
+    <a href="/" class="brand">
+      <LanternLogo size={46} />
+      <span class="brand-name">{site.name}</span>
+    </a>
+    <p class="brand-tagline">{site.description}</p>
     <nav>
       <a href="/">Home</a>
       <a href="/about/">About</a>
@@ -236,7 +368,7 @@ const ads = site.ads;
   )}
 
   <footer>
-    <p>&copy; {year} {site.name}. Powered by Astro.</p>
+    <p>&copy; {year} {site.name}. Lantern in hand, stories in heart.</p>
   </footer>
 </body>
 </html>
