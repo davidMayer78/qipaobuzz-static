@@ -1,6 +1,6 @@
 export const site = {
   name: 'QipaoBuzz',
-  description: 'Fashion & Lifestyle Blog',
+  description: 'Chinese News · 华语新闻',
   url: 'https://qipaobuzz.com',
   postsPerPage: 10,
   minTagCount: 3,
