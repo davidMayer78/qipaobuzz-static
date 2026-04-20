@@ -1,7 +1,6 @@
 ---
 import { site } from '../lib/site.js';
 
-
 const {
   title,
   description = site.description,
@@ -54,323 +53,474 @@ const ads = site.ads;
     />
   )}
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+
   <style is:global>
     :root {
-      --bg: #FFF5F0;
-      --surface: #FFFFFF;
-      --accent: #C73E3A;
-      --accent-soft: #E8D4CE;
-      --gold: #C89B4D;
-      --text: #2C1A15;
-      --muted: #8B6B5E;
-      --border: #EAD4CE;
-      --serif: 'Georgia', 'Times New Roman', 'Noto Serif', serif;
-      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Roboto, sans-serif;
+      --ink:       #1f1410;
+      --ink-soft:  #5a3d36;
+      --muted:     #8a6e67;
+      --rice:      #f7efe1;
+      --rice-2:    #f1e7d3;
+      --paper:     #fffaf2;
+      --red:       #c8102e;
+      --red-deep:  #8b0d22;
+      --red-soft:  #f4d5d8;
+      --gold:      #c89b4d;
+      --gold-deep: #8f6e2f;
+      --border:    #e8d9bb;
+      --serif-cn:  'Noto Serif SC', 'Songti SC', 'SimSun', 'Cambria', Georgia, serif;
+      --brand-cn:  'Ma Shan Zheng', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', cursive;
+      --display:   'ZCOOL XiaoWei', 'Ma Shan Zheng', 'STKaiti', serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { background: var(--bg); }
+    html { background: var(--rice); }
     body {
-      font-family: var(--sans);
-      line-height: 1.7;
-      color: var(--text);
-      background: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 0%, #FFE9E0 0%, transparent 35%),
-        radial-gradient(circle at 90% 5%, #FFEBE2 0%, transparent 40%);
+      font-family: var(--serif-cn);
+      line-height: 1.8;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(200,16,46,0.06) 0%, transparent 35%),
+        radial-gradient(circle at 90% 8%, rgba(200,155,77,0.10) 0%, transparent 45%),
+        repeating-linear-gradient(
+          45deg,
+          rgba(139,13,34,0.025) 0 1px,
+          transparent 1px 22px
+        ),
+        var(--rice);
+      background-attachment: fixed;
       min-height: 100vh;
-      max-width: 860px;
+      padding: 18px 14px 40px;
+    }
+
+    .scroll {
+      max-width: 880px;
       margin: 0 auto;
-      padding: 24px 20px 40px;
+      background: var(--paper);
+      border: 1px solid var(--gold);
+      box-shadow:
+        0 0 0 6px var(--paper),
+        0 0 0 7px var(--red),
+        0 4px 24px rgba(31, 20, 16, 0.15);
+      padding: 0;
+      position: relative;
     }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 24px;
-      margin-bottom: 36px;
+    /* four corner ornaments */
+    .scroll::before, .scroll::after,
+    .scroll > .cnr-bl, .scroll > .cnr-br {
+      content: "";
+      position: absolute;
+      width: 28px; height: 28px;
+      background:
+        linear-gradient(var(--red), var(--red)) top left / 100% 3px no-repeat,
+        linear-gradient(var(--red), var(--red)) top left / 3px 100% no-repeat;
     }
-    .brand {
-      display: flex;
+    .scroll::before { top: 6px; left: 6px; }
+    .scroll::after {
+      top: 6px; right: 6px;
+      transform: scaleX(-1);
+    }
+    .scroll > .cnr-bl {
+      bottom: 6px; left: 6px;
+      transform: scaleY(-1);
+    }
+    .scroll > .cnr-br {
+      bottom: 6px; right: 6px;
+      transform: scale(-1,-1);
+    }
+
+    /* top decorative ribbon */
+    .ribbon {
+      background:
+        linear-gradient(90deg, var(--red) 0%, var(--red-deep) 50%, var(--red) 100%);
+      color: #f7dfae;
+      padding: 6px 0;
+      text-align: center;
+      font-family: var(--brand-cn);
+      font-size: 18px;
+      letter-spacing: 6px;
+      border-bottom: 1px solid var(--gold);
+      position: relative;
+    }
+    .ribbon::before, .ribbon::after {
+      content: "❋";
+      color: var(--gold);
+      margin: 0 12px;
+    }
+
+    header.qp-head {
+      text-align: center;
+      padding: 30px 20px 22px;
+      background:
+        linear-gradient(180deg, var(--paper) 0%, var(--rice-2) 100%);
+      border-bottom: 2px double var(--red);
+      position: relative;
+    }
+    .brand-wrap {
+      display: inline-flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 8px;
+      gap: 18px;
       text-decoration: none;
-      color: var(--text);
+      color: inherit;
+    }
+    .brand-wrap img {
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      border: 2px solid var(--red);
+      box-shadow: 0 0 0 3px var(--paper), 0 0 0 4px var(--gold);
     }
     .brand-name {
-      font-family: var(--serif);
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--accent);
+      font-family: var(--display);
+      font-size: 3rem;
       line-height: 1;
+      color: var(--red);
+      letter-spacing: 2px;
     }
-    .brand-tagline {
-      color: var(--muted);
+    .brand-seal {
+      display: inline-block;
+      vertical-align: super;
+      font-family: var(--brand-cn);
+      font-size: 0.9rem;
+      margin-left: 6px;
+      padding: 2px 6px;
+      background: var(--red);
+      color: var(--paper);
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      letter-spacing: 2px;
+    }
+    .tagline {
+      margin: 12px auto 0;
+      color: var(--ink-soft);
       font-style: italic;
-      font-size: 0.95rem;
-      margin: 6px 0 18px 58px;
+      letter-spacing: 3px;
+      font-size: 0.98rem;
     }
-    header nav { margin-left: 58px; }
-    header nav a {
-      margin-right: 22px;
+    .tagline::before { content: "「"; color: var(--red); margin-right: 2px; font-style: normal; }
+    .tagline::after  { content: "」"; color: var(--red); margin-left: 2px; font-style: normal; }
+
+    nav.qp-nav { margin-top: 16px; }
+    nav.qp-nav a {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 4px 14px;
+      color: var(--red);
       text-decoration: none;
-      color: var(--muted);
       font-size: 0.95rem;
-      padding-bottom: 2px;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.15s, color 0.15s;
+      letter-spacing: 2px;
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      transition: color 0.15s, background 0.15s;
     }
-    header nav a:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
+    nav.qp-nav a:hover { color: var(--paper); background: var(--red); }
+
+    main { padding: 22px 28px; }
+
+    /* Chinese-style decorative divider */
+    .qp-divider {
+      text-align: center;
+      margin: 24px 0;
+      color: var(--red);
+      letter-spacing: 8px;
     }
+    .qp-divider::before, .qp-divider::after {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      width: 30%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 8px;
+    }
+
     .post {
-      background: var(--surface);
+      background: var(--paper);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-left: 4px solid var(--red);
       padding: 22px 26px;
       margin-bottom: 18px;
-      box-shadow: 0 1px 2px rgba(139, 42, 40, 0.04);
+      position: relative;
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .post:hover {
-      box-shadow: 0 6px 18px rgba(139, 42, 40, 0.08);
+      box-shadow: 0 6px 20px rgba(139, 13, 34, 0.12);
       transform: translateY(-1px);
     }
-    .post-title {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      line-height: 1.3;
-      margin-bottom: 8px;
+    .post::before {
+      content: "卍";
+      position: absolute;
+      top: 8px; right: 12px;
+      color: var(--gold);
+      opacity: 0.35;
+      font-size: 1.1rem;
     }
-    .post-title a { text-decoration: none; color: var(--text); }
-    .post-title a:hover { color: var(--accent); }
-    .post-meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 10px; }
-    .post-excerpt { color: #4a3a33; }
+    .post-title {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .post-title a { text-decoration: none; color: var(--ink); }
+    .post-title a:hover { color: var(--red); }
+    .post-meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 10px; letter-spacing: 1px; }
+    .post-meta::before { content: "· "; color: var(--red); }
+    .post-excerpt { color: var(--ink-soft); }
 
     .post-content {
-      background: var(--surface);
+      background: var(--paper);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 32px 36px;
-      line-height: 1.85;
+      padding: 36px 40px;
+      line-height: 1.95;
       font-size: 1.08rem;
+      position: relative;
     }
+    .post-content::before, .post-content::after {
+      content: "";
+      position: absolute;
+      width: 22px; height: 22px;
+      background:
+        linear-gradient(var(--red), var(--red)) top left / 100% 2px no-repeat,
+        linear-gradient(var(--red), var(--red)) top left / 2px 100% no-repeat;
+    }
+    .post-content::before { top: 6px; left: 6px; }
+    .post-content::after  { bottom: 6px; right: 6px; transform: scale(-1,-1); }
     .post-content h1 {
-      font-family: var(--serif);
-      font-size: 2rem;
+      font-family: var(--display);
+      font-size: 2.1rem;
       line-height: 1.2;
-      color: var(--text);
-      margin-bottom: 4px;
+      color: var(--red-deep);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
     }
+    .post-content h1::before { content: "「"; color: var(--red); }
+    .post-content h1::after  { content: "」"; color: var(--red); }
     .post-content h2, .post-content h3 {
-      font-family: var(--serif);
+      font-family: var(--display);
       margin-top: 32px;
       margin-bottom: 12px;
-      color: var(--text);
+      color: var(--red);
     }
-    .post-content h2 { font-size: 1.5rem; }
-    .post-content h3 { font-size: 1.2rem; }
-    .post-content p { margin-bottom: 16px; }
-    .post-content a { color: var(--accent); }
-    .post-content code {
-      background: #f8ece8;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 0.92em;
-    }
-    .post-content pre {
-      background: #f8ece8;
-      padding: 15px;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
+    .post-content h2 { font-size: 1.55rem; border-bottom: 1px dashed var(--gold); padding-bottom: 4px; }
+    .post-content h3 { font-size: 1.25rem; }
+    .post-content p { margin-bottom: 16px; text-indent: 2em; }
+    .post-content p:first-of-type { text-indent: 0; }
+    .post-content a { color: var(--red); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+    .post-content a:hover { color: var(--red-deep); text-decoration-style: solid; }
     .post-content img {
       max-width: 100%;
       height: auto;
-      border-radius: 6px;
+      border: 1px solid var(--gold);
+      padding: 4px;
+      background: var(--paper);
+      box-shadow: 0 2px 10px rgba(31, 20, 16, 0.08);
       margin: 14px 0;
     }
     .post-content blockquote {
-      border-left: 4px solid var(--accent);
+      border-left: 4px solid var(--red);
+      background: linear-gradient(90deg, var(--red-soft), transparent);
       margin: 16px 0;
-      padding: 4px 18px;
-      color: var(--muted);
-      background: #fff9f6;
+      padding: 10px 18px;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .post-content blockquote::before {
+      content: "『";
+      color: var(--red);
+      font-size: 1.4rem;
+      margin-right: 4px;
+    }
+    .post-content code {
+      background: var(--rice-2);
+      color: var(--red-deep);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 0.92em;
+    }
+    .post-content pre {
+      background: var(--rice-2);
+      border-left: 3px solid var(--red);
+      padding: 14px 18px;
+      overflow-x: auto;
     }
 
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      max-width: 100%;
-      margin: 20px 0;
-      border-radius: 6px;
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-    .tiktok-embed { margin: 20px 0; }
-    .twitter-tweet { margin: 20px auto; }
+    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 18px 0; border: 1px solid var(--gold); }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
     .tag {
       display: inline-block;
-      background: var(--accent-soft);
-      color: var(--accent);
-      padding: 2px 10px;
-      border-radius: 999px;
+      padding: 1px 10px;
+      margin: 2px 4px 2px 0;
+      background: var(--red);
+      color: var(--paper);
+      border-radius: 2px;
       font-size: 0.78rem;
-      margin-right: 6px;
-      margin-top: 2px;
+      letter-spacing: 1px;
     }
     .tag a { color: inherit; text-decoration: none; }
-    .tag:hover { background: var(--accent); color: #fff; }
-    .tag:hover a { color: #fff; }
+    .tag:hover { background: var(--red-deep); }
 
     .back-link {
       display: inline-block;
-      margin-bottom: 20px;
-      color: var(--accent);
+      margin-bottom: 18px;
+      color: var(--red);
       text-decoration: none;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
     }
-    .back-link:hover { text-decoration: underline; }
-
-    footer {
-      margin-top: 60px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.88rem;
-      text-align: center;
-    }
+    .back-link::before { content: "❮ "; color: var(--gold); }
+    .back-link:hover { color: var(--red-deep); }
 
     .pagination {
-      margin-top: 40px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .pagination-link {
       display: inline-block;
-      padding: 10px 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      padding: 8px 18px;
+      background: var(--paper);
+      border: 1px solid var(--red);
+      color: var(--red);
       text-decoration: none;
-      color: var(--text);
-      font-size: 0.92rem;
+      font-family: var(--display);
+      letter-spacing: 2px;
     }
-    .pagination-link:hover {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
+    .pagination-link:hover { background: var(--red); color: var(--paper); }
+    .pagination-info {
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
     }
-    .pagination-info { color: var(--muted); font-size: 0.88rem; }
 
     .related-posts {
       margin-top: 48px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      border-top: 2px double var(--red);
     }
     .related-posts h3 {
-      font-family: var(--serif);
-      font-size: 1.35rem;
-      margin-bottom: 20px;
-      color: var(--text);
+      font-family: var(--display);
+      font-size: 1.5rem;
+      color: var(--red);
+      text-align: center;
+      margin-bottom: 18px;
+      letter-spacing: 4px;
     }
+    .related-posts h3::before { content: "✿ "; color: var(--gold); }
+    .related-posts h3::after  { content: " ✿"; color: var(--gold); }
     .related-posts-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 16px;
     }
     .related-post-card {
-      background: var(--surface);
+      background: var(--paper);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-top: 3px solid var(--red);
       padding: 16px 18px;
       transition: box-shadow 0.2s;
     }
-    .related-post-card:hover { box-shadow: 0 4px 14px rgba(139, 42, 40, 0.1); }
+    .related-post-card:hover { box-shadow: 0 4px 14px rgba(139, 13, 34, 0.12); }
     .related-post-link { text-decoration: none; color: inherit; }
     .related-post-link h4 {
-      font-family: var(--serif);
-      font-size: 1.02rem;
+      font-family: var(--display);
+      font-size: 1.05rem;
       margin-bottom: 8px;
-      color: var(--text);
+      color: var(--ink);
     }
-    .related-post-excerpt {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-    .related-post-date { font-size: 0.78rem; color: var(--muted); }
+    .related-post-excerpt { font-size: 0.88rem; color: var(--ink-soft); }
+    .related-post-date { font-size: 0.78rem; color: var(--muted); font-style: italic; }
 
     .ad-slot { margin: 26px 0; text-align: center; }
     .ad-slot-top { margin: 14px 0 22px; }
     .ad-slot-in-article { margin: 26px 0; clear: both; }
 
+    footer.qp-foot {
+      margin-top: 0;
+      padding: 20px 18px;
+      background:
+        linear-gradient(180deg, var(--rice-2) 0%, var(--paper) 100%);
+      border-top: 2px double var(--red);
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      letter-spacing: 2px;
+    }
+    .foot-cn {
+      font-family: var(--brand-cn);
+      color: var(--red);
+      font-size: 1.1rem;
+      letter-spacing: 8px;
+      margin-bottom: 4px;
+    }
+
     @media (max-width: 600px) {
-      body { padding: 16px 14px 30px; }
-      .post { padding: 18px 18px; }
-      .post-content { padding: 22px 20px; }
+      body { padding: 12px 8px 30px; }
+      main { padding: 16px 14px; }
+      .post { padding: 16px 18px; }
+      .post-content { padding: 20px 18px; }
+      .brand-name { font-size: 2.1rem; }
       .related-posts-grid { grid-template-columns: 1fr; }
-      .brand-name { font-size: 1.75rem; }
-      .brand-tagline, header nav { margin-left: 0; }
+      nav.qp-nav a { margin: 2px 4px; padding: 3px 10px; font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="/" class="brand">
-      <img src="/favicon.png" alt="" width="46" height="46" style="border-radius:50%;" />
-      <span class="brand-name">{site.name}</span>
-    </a>
-    <p class="brand-tagline">{site.description}</p>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about/">About</a>
-    </nav>
-  </header>
+  <div class="scroll">
+    <span class="cnr-bl"></span>
+    <span class="cnr-br"></span>
 
-  {ads?.enabled && (
-    <div class="ad-slot ad-slot-top">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client={`ca-pub-${ads.publisherId}`}
-           data-ad-slot={ads.adSlots.top}
-           data-ad-format="horizontal"
-           data-full-width-responsive="true"></ins>
-      <script set:html="(adsbygoogle = window.adsbygoogle || []).push({});" />
-    </div>
-  )}
+    <div class="ribbon">华风雅韵 · 时尚生活</div>
 
-  <main>
-    <slot />
-  </main>
+    <header class="qp-head">
+      <a href="/" class="brand-wrap">
+        <img src="/favicon.png" alt="" width="62" height="62" />
+        <span class="brand-name">{site.name}<span class="brand-seal">旗袍</span></span>
+      </a>
+      <p class="tagline">{site.description}</p>
+      <nav class="qp-nav">
+        <a href="/">首页 Home</a>
+        <a href="/about/">关于 About</a>
+        <a href="/rss.xml">订阅 RSS</a>
+      </nav>
+    </header>
 
-  {ads?.enabled && (
-    <div class="ad-slot">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client={`ca-pub-${ads.publisherId}`}
-           data-ad-slot={ads.adSlots.bottom}
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script set:html="(adsbygoogle = window.adsbygoogle || []).push({});" />
-    </div>
-  )}
+    {ads?.enabled && (
+      <div class="ad-slot ad-slot-top">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client={`ca-pub-${ads.publisherId}`}
+             data-ad-slot={ads.adSlots.top}
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script set:html="(adsbygoogle = window.adsbygoogle || []).push({});" />
+      </div>
+    )}
 
-  <footer>
-    <p>&copy; {year} {site.name}. Lantern in hand, stories in heart.</p>
-  </footer>
+    <main>
+      <slot />
+    </main>
+
+    {ads?.enabled && (
+      <div class="ad-slot">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client={`ca-pub-${ads.publisherId}`}
+             data-ad-slot={ads.adSlots.bottom}
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script set:html="(adsbygoogle = window.adsbygoogle || []).push({});" />
+      </div>
+    )}
+
+    <footer class="qp-foot">
+      <div class="foot-cn">灯笼在手 · 故事在心</div>
+      <div>&copy; {year} {site.name} · All rights reserved</div>
+    </footer>
+  </div>
 </body>
 </html>
