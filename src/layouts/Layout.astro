@@ -1,6 +1,6 @@
 ---
 import { site } from '../lib/site.js';
-import LanternLogo from '../components/LanternLogo.astro';
+
 
 const {
   title,
@@ -24,7 +24,9 @@ const ads = site.ads;
   <meta name="description" content={description} />
   {canonical && <link rel="canonical" href={canonical} />}
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="270x270" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={site.name} />
@@ -329,7 +331,7 @@ const ads = site.ads;
 <body>
   <header>
     <a href="/" class="brand">
-      <LanternLogo size={46} />
+      <img src="/favicon.png" alt="" width="46" height="46" style="border-radius:50%;" />
       <span class="brand-name">{site.name}</span>
     </a>
     <p class="brand-tagline">{site.description}</p>
