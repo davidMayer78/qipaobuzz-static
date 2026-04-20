@@ -1,0 +1,42 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PostList from '../../../components/PostList.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { site } from '../../../lib/site.js';
+import { getAllPosts } from '../../../lib/markdown.js';
+
+export function getStaticPaths() {
+  const posts = getAllPosts();
+  const pageSize = site.postsPerPage;
+  const total = Math.ceil(posts.length / pageSize);
+  const paths = [];
+  for (let i = 2; i <= total; i++) {
+    paths.push({ params: { page: String(i) } });
+  }
+  return paths;
+}
+
+const { page: pageParam } = Astro.params;
+const currentPage = parseInt(pageParam);
+const posts = getAllPosts();
+const pageSize = site.postsPerPage;
+const totalPages = Math.ceil(posts.length / pageSize);
+const start = (currentPage - 1) * pageSize;
+const currentPosts = posts.slice(start, start + pageSize);
+
+const page = {
+  currentPage,
+  lastPage: totalPages,
+  total: posts.length,
+  url: {
+    prev: currentPage === 2 ? '/' : `/page/${currentPage - 1}/`,
+    next: currentPage < totalPages ? `/page/${currentPage + 1}/` : null,
+  },
+};
+
+const canonical = `${site.url}/page/${currentPage}/`;
+---
+<Layout title={`${site.name} — Page ${currentPage}`} description={site.description} canonical={canonical}>
+  <PostList posts={currentPosts} />
+  <Pagination page={page} />
+</Layout>

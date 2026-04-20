@@ -1,0 +1,25 @@
+---
+import { getVisibleTags } from '../lib/markdown.js';
+const { posts, tag } = Astro.props;
+const visible = getVisibleTags();
+---
+{tag && <h2 style="margin-bottom: 20px;">Tagged: {tag}</h2>}
+
+{posts.map((post) => (
+  <article class="post">
+    <h2 class="post-title">
+      <a href={`/${post.slug}/`}>{post.title}</a>
+    </h2>
+    <div class="post-meta">
+      {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      {post.tags.filter((t) => visible.has(t)).map((t) => (
+        <span class="tag"><a href={`/tag/${t}/`}>{t}</a></span>
+      ))}
+    </div>
+    <p class="post-excerpt">{post.rawExcerpt}</p>
+  </article>
+))}
+
+{posts.length === 0 && (
+  <p style="color: #999; text-align: center; padding: 50px 0;">No posts yet.</p>
+)}

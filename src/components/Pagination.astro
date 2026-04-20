@@ -1,0 +1,20 @@
+---
+const { page, basePath = '/' } = Astro.props;
+const hasPrev = page.url.prev;
+const hasNext = page.url.next;
+---
+{page.lastPage > 1 && (
+  <nav class="pagination">
+    {hasPrev ? (
+      <a href={page.url.prev} class="pagination-link">← Newer Posts</a>
+    ) : <span />}
+
+    <span class="pagination-info">
+      Page {page.currentPage} of {page.lastPage} ({page.total} posts)
+    </span>
+
+    {hasNext ? (
+      <a href={page.url.next} class="pagination-link">Older Posts →</a>
+    ) : <span />}
+  </nav>
+)}

@@ -1,0 +1,38 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PostList from '../../../components/PostList.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { site } from '../../../lib/site.js';
+import { getAllPosts, getVisibleTags } from '../../../lib/markdown.js';
+
+export function getStaticPaths() {
+  const visible = getVisibleTags();
+  return [...visible].map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const tagPosts = getAllPosts().filter((p) => p.tags.includes(tag));
+const pageSize = site.postsPerPage;
+const currentPosts = tagPosts.slice(0, pageSize);
+const totalPages = Math.ceil(tagPosts.length / pageSize);
+
+const page = {
+  currentPage: 1,
+  lastPage: totalPages,
+  total: tagPosts.length,
+  url: {
+    prev: null,
+    next: totalPages > 1 ? `/tag/${tag}/page/2/` : null,
+  },
+};
+
+const canonical = `${site.url}/tag/${tag}/`;
+---
+<Layout
+  title={`Tagged: ${tag} — ${site.name}`}
+  description={`Posts tagged ${tag}`}
+  canonical={canonical}
+>
+  <PostList posts={currentPosts} tag={tag} />
+  <Pagination page={page} />
+</Layout>

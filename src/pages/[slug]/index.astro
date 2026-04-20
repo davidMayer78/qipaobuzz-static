@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { site } from '../../lib/site.js';
+import {
+  getAllPosts,
+  getVisibleTags,
+  renderMarkdown,
+  getExcerpt,
+  getRelatedPosts,
+  extractFirstImage,
+} from '../../lib/markdown.js';
+
+export function getStaticPaths() {
+  const posts = getAllPosts();
+  const reserved = new Set(['about', 'rss.xml', 'robots.txt', 'sitemap.xml', 'sitemap-index.xml']);
+  return posts
+    .filter((p) => !reserved.has(p.slug))
+    .map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const allPosts = getAllPosts();
+const visibleTags = getVisibleTags();
+const html = renderMarkdown(post.body);
+const related = getRelatedPosts(post, allPosts);
+const excerpt = getExcerpt(post.body, 160);
+const firstImage = extractFirstImage(html);
+const fullImage = firstImage ? `${site.url}${firstImage}` : null;
+const canonical = `${site.url}/${post.slug}/`;
+const ads = site.ads;
+
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  datePublished: post.date,
+  dateModified: post.date,
+  author: { '@type': 'Organization', name: site.name },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+  },
+  description: excerpt,
+  ...(fullImage ? { image: fullImage } : {}),
+});
+
+const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<Layout
+  title={post.title}
+  description={excerpt}
+  canonical={canonical}
+  image={fullImage}
+  structuredData={structuredData}
+>
+  <a href="/" class="back-link">← Back to Home</a>
+
+  {ads?.enabled && (
+    <div class="ad-slot ad-slot-in-article">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client={`ca-pub-${ads.publisherId}`}
+           data-ad-slot={ads.adSlots.inArticle}
+           data-ad-format="fluid"
+           data-ad-layout="in-article"
+           data-full-width-responsive="true"></ins>
+      <script set:html="(adsbygoogle = window.adsbygoogle || []).push({});" />
+    </div>
+  )}
+
+  <article class="post-content">
+    <h1>{post.title}</h1>
+    <div class="post-meta" style="margin-bottom: 30px;">
+      {formattedDate}
+      {post.tags.filter((t) => visibleTags.has(t)).map((t) => (
+        <span class="tag"><a href={`/tag/${t}/`}>{t}</a></span>
+      ))}
+    </div>
+    <div set:html={html} />
+  </article>
+
+  {related.length > 0 && (
+    <section class="related-posts">
+      <h3>Related Posts</h3>
+      <div class="related-posts-grid">
+        {related.map((r) => (
+          <div class="related-post-card">
+            <a href={`/${r.slug}/`} class="related-post-link">
+              <h4>{r.title}</h4>
+              <p class="related-post-excerpt">{r.rawExcerpt}</p>
+              <span class="related-post-date">
+                {new Date(r.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </span>
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+</Layout>

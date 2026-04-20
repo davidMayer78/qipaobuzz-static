@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostList from '../components/PostList.astro';
+import Pagination from '../components/Pagination.astro';
+import { site } from '../lib/site.js';
+import { getAllPosts } from '../lib/markdown.js';
+
+const posts = getAllPosts();
+const pageSize = site.postsPerPage;
+const currentPosts = posts.slice(0, pageSize);
+const totalPages = Math.ceil(posts.length / pageSize);
+
+const page = {
+  currentPage: 1,
+  lastPage: totalPages,
+  total: posts.length,
+  url: {
+    prev: null,
+    next: totalPages > 1 ? '/page/2/' : null,
+  },
+};
+
+const canonical = `${site.url}/`;
+---
+<Layout title={site.name} description={site.description} canonical={canonical}>
+  <PostList posts={currentPosts} />
+  <Pagination page={page} />
+</Layout>

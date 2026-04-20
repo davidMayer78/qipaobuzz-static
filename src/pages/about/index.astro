@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { site } from '../../lib/site.js';
+import { getPage, renderMarkdown, getExcerpt } from '../../lib/markdown.js';
+
+const page = getPage('about');
+const title = page?.title || 'About';
+const html = page ? renderMarkdown(page.body) : '';
+const description = page ? getExcerpt(page.body, 160) : site.description;
+const canonical = `${site.url}/about/`;
+---
+<Layout title={title} description={description} canonical={canonical}>
+  <a href="/" class="back-link">← Back to Home</a>
+  <h1>{title}</h1>
+  <div class="post-content">
+    <div set:html={html} />
+  </div>
+</Layout>

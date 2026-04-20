@@ -1,0 +1,57 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import PostList from '../../../../../components/PostList.astro';
+import Pagination from '../../../../../components/Pagination.astro';
+import { site } from '../../../../../lib/site.js';
+import { getAllPosts, getVisibleTags } from '../../../../../lib/markdown.js';
+
+export function getStaticPaths() {
+  const posts = getAllPosts();
+  const visible = getVisibleTags();
+  const tagMap = new Map();
+  posts.forEach((p) =>
+    p.tags.forEach((t) => {
+      if (!visible.has(t)) return;
+      if (!tagMap.has(t)) tagMap.set(t, 0);
+      tagMap.set(t, tagMap.get(t) + 1);
+    })
+  );
+  const pageSize = site.postsPerPage;
+  const paths = [];
+  for (const [tag, count] of tagMap.entries()) {
+    const total = Math.ceil(count / pageSize);
+    for (let i = 2; i <= total; i++) {
+      paths.push({ params: { tag, page: String(i) } });
+    }
+  }
+  return paths;
+}
+
+const { tag, page: pageParam } = Astro.params;
+const currentPage = parseInt(pageParam);
+const tagPosts = getAllPosts().filter((p) => p.tags.includes(tag));
+const pageSize = site.postsPerPage;
+const totalPages = Math.ceil(tagPosts.length / pageSize);
+const start = (currentPage - 1) * pageSize;
+const currentPosts = tagPosts.slice(start, start + pageSize);
+
+const page = {
+  currentPage,
+  lastPage: totalPages,
+  total: tagPosts.length,
+  url: {
+    prev: currentPage === 2 ? `/tag/${tag}/` : `/tag/${tag}/page/${currentPage - 1}/`,
+    next: currentPage < totalPages ? `/tag/${tag}/page/${currentPage + 1}/` : null,
+  },
+};
+
+const canonical = `${site.url}/tag/${tag}/page/${currentPage}/`;
+---
+<Layout
+  title={`Tagged: ${tag} — Page ${currentPage} — ${site.name}`}
+  description={`Posts tagged ${tag}, page ${currentPage}`}
+  canonical={canonical}
+>
+  <PostList posts={currentPosts} tag={tag} />
+  <Pagination page={page} />
+</Layout>
